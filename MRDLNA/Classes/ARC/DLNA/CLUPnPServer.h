@@ -34,6 +34,10 @@
 
 @property (nonatomic,assign) NSInteger searchTime;
 
+@property (nonatomic,copy) void (^BlockSearch)(BOOL ConnectionStatus);
+
+@property (nonatomic,copy) void (^BlockSocketOff)(void);
+
 + (instancetype)shareServer;
 
 /**

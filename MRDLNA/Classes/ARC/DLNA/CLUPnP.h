@@ -13,6 +13,7 @@
 #import "CLUPnPRenderer.h"
 #import "CLUPnPDevice.h"
 #import "CLUPnPAVPositionInfo.h"
+#import "CLUPnPAVPositionInfo.h"
 
 #ifdef DEBUG
 #define CLLog(s, ... ) NSLog( @"[%@ in line %d] => %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
@@ -20,7 +21,7 @@
 #define CLLog(s, ... )
 #endif
 
-//IPv4下的多播地址
+//IPv4下的多播地址 224.0.0.0 - 239.255.255.255
 static NSString *ssdpAddres = @"239.255.255.250";
 //IPv4下的SSDP端口
 static UInt16   ssdpPort = 1900;

@@ -18,6 +18,7 @@
 
 - (void)upnpSetAVTransportURIResponse;  // 设置url响应
 - (void)upnpGetTransportInfoResponse:(CLUPnPTransportInfo *)info;   // 获取播放状态
+- (void)upnpGetPositionInfoResponse:(CLUPnPAVPositionInfo *)info;   // 获取播放进度
 
 @optional
 
@@ -38,7 +39,7 @@
 - (void)upnpSetVolumeResponse;              // 设置音量响应
 - (void)upnpSetNextAVTransportURIResponse;  // 设置下一个url响应
 - (void)upnpGetVolumeResponse:(NSString *)volume;                   // 获取音频信息
-- (void)upnpGetPositionInfoResponse:(CLUPnPAVPositionInfo *)info;   // 获取播放进度
+
 
 
 @end

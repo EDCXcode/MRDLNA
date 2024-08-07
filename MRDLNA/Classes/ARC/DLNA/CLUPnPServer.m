@@ -102,11 +102,14 @@
 
 #pragma mark -- GCDAsyncUdpSocketDelegate --
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag{
-    CLLog(@"发送信息成功");
+    NSLog(@"发送信息成功");
      __weak typeof (self) weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(weakSelf.searchTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         weakSelf.receiveDevice = NO;
-        CLLog(@"搜索结束");
+        NSLog(@"搜索结束");
+        if (weakSelf.BlockSearch) {
+            weakSelf.BlockSearch(weakSelf.receiveDevice);
+        }
     });
 }
 
@@ -115,7 +118,11 @@
 }
 
 - (void)udpSocketDidClose:(GCDAsyncUdpSocket *)sock withError:(NSError  * _Nullable)error{
-    CLLog(@"udpSocket关闭");
+    NSLog(@"udpSocket关闭");
+    __weak typeof (self) weakSelf = self;
+    if (weakSelf.BlockSocketOff) {
+        weakSelf.BlockSocketOff();
+    }
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data
