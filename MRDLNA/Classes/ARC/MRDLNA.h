@@ -18,11 +18,22 @@
  */
 - (void)searchDLNAResult:(NSArray *)devicesArray;
 
-
 /**
  投屏成功开始播放
  */
 - (void)dlnaStartPlay;
+
+/**
+ 投屏播放进度
+ */
+- (void)dlnaupnpGetPositionInfoResponse:(CLUPnPAVPositionInfo *)info;
+
+
+/**
+ 投屏播放状态
+ */
+- (void)upnpGetTransportInfoResponse:(CLUPnPTransportInfo *)info;
+
 
 @end
 
@@ -36,6 +47,10 @@
 
 @property(nonatomic,assign) NSInteger searchTime;
 
+@property (nonatomic,copy) void (^BlockSearch)(BOOL ConnectionStatus);
+
+@property (nonatomic,copy) void (^BlockSocketOff)(void);
+
 /**
  单例
  */
@@ -45,6 +60,11 @@
  搜设备
  */
 - (void)startSearch;
+
+/**
+ 获取播放进度
+ */
+- (void)GetPositionInfo;
 
 /**
  DLNA投屏
@@ -85,4 +105,8 @@
  播放切集
  */
 - (void)playTheURL:(NSString *)url;
+
+
+
+
 @end

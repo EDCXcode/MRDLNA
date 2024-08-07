@@ -37,6 +37,14 @@
     if (self) {
         self.upd = [CLUPnPServer shareServer];
         self.upd.searchTime = 5;
+        
+        __weak typeof (self) weakSelf = self;
+        self.upd.BlockSearch = ^(BOOL ConnectionStatus) {
+            weakSelf.BlockSearch(ConnectionStatus);
+        };
+        self.upd.BlockSocketOff = ^{
+            weakSelf.BlockSocketOff();
+        };
         self.upd.delegate = self;
         self.dataArray = [NSMutableArray array];
     }
@@ -110,7 +118,7 @@
 
 
 /**
- 播放进度条
+ 设置播放进度条
  */
 - (void)seekChanged:(NSInteger)seek{
     self.seekTime = seek;
@@ -140,6 +148,7 @@
 
 #pragma mark -- 搜索协议CLUPnPDeviceDelegate回调
 - (void)upnpSearchChangeWithResults:(NSArray<CLUPnPDevice *> *)devices{
+    
     NSMutableArray *deviceMarr = [NSMutableArray array];
     for (CLUPnPDevice *device in devices) {
         // 只返回匹配到视频播放的设备
@@ -154,7 +163,7 @@
 }
 
 - (void)upnpSearchErrorWithError:(NSError *)error{
-//    NSLog(@"DLNA_Error======>%@", error);
+    NSLog(@"DLNA_Error======>%@", error);
 }
 
 #pragma mark - CLUPnPResponseDelegate
@@ -163,9 +172,21 @@
 }
 
 - (void)upnpGetTransportInfoResponse:(CLUPnPTransportInfo *)info{
-//    NSLog(@"%@ === %@", info.currentTransportState, info.currentTransportStatus);
+    NSLog(@"%@ === %@", info.currentTransportState, info.currentTransportStatus);
     if (!([info.currentTransportState isEqualToString:@"PLAYING"] || [info.currentTransportState isEqualToString:@"TRANSITIONING"])) {
         [self.render play];
+    }
+}
+
+
+- (void)GetPositionInfo{
+    [self.render getPositionInfo];
+}
+
+// 获取播放进度
+- (void)upnpGetPositionInfoResponse:(CLUPnPAVPositionInfo *)info{
+    if ([self.delegate respondsToSelector:@selector(dlnaupnpGetPositionInfoResponse:)]) {
+        [self.delegate dlnaupnpGetPositionInfoResponse:info];
     }
 }
 
