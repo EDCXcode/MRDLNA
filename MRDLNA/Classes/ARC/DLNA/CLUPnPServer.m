@@ -8,8 +8,12 @@
 
 #import "CLUPnP.h"
 #import "CLUPnPServer.h"
-#import "GCDAsyncUdpSocket.h"
 #import "GDataXMLNode.h"
+#if __has_include(<CocoaAsyncSocket/GCDAsyncSocket.h>)
+#import <CocoaAsyncSocket/GCDAsyncUdpSocket.h>
+#else
+#import "GCDAsyncUdpSocket.h"
+#endif
 
 @interface CLUPnPServer ()<GCDAsyncUdpSocketDelegate>
 
