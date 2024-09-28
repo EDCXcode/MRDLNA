@@ -11,8 +11,30 @@
 # Usage
 
 ```
-pod 'MRDLNA'
+pod 'MRDLNA', :git => 'https://github.com/EDCXcode/MRDLNA.git' 
 ```
+    lazy var dlnaManager = {
+        let dlna = MRDLNA.sharedMRDLNAManager()
+        dlna?.delegate = self
+        //搜索完成
+        dlna?.blockSearch = {[weak self] falg in
+         self?.searchDone()
+        }
+        //Socket关闭
+        dlna?.blockSocketOff = {[weak self] in
+            DispatchQueue.main.sync {
+             //保证主线程刷新UI
+            }
+        }
+        return dlna
+    }()
+     override func viewDidLoad() {
+        super.viewDidLoad()
+         //延迟开启搜索设备
+         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {[weak self] in
+            self?.dlnaManager?.startSearch()
+       }
+    }
 
 
 - Search Devices
