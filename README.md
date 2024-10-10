@@ -5,6 +5,7 @@
 ![](https://img.shields.io/badge/LANG-ObjC-brightgreen.svg)
 # Dependencies
 
+一 DLNA 投屏
 - iOS DLNA Function 
 - iOS DLNA 投屏功能, 支持各大主流电视盒子(小米,华为,乐视,移动魔百盒等), 可以播放,暂停,快进退,调音量,退出.
 - iOS 16.0后 实现投屏协议 需要向苹果申请多播权限
@@ -12,6 +13,9 @@
 https://developer.apple.com/contact/request/networking-multicast
 参考文档
 https://www.jianshu.com/p/f5379ba4c250
+
+二 苹果隔空播放
+
 # Usage
 
 ```
