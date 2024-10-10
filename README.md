@@ -116,7 +116,7 @@ pod 'MRDLNA', :git => 'https://github.com/EDCXcode/MRDLNA.git'
 ```
 
 - 苹果系统隔空播放
-
+```
 import AVKit
 var player : AVPlayer?
 var cmTime : CMTime?
@@ -187,6 +187,6 @@ extension XXXXViewController:AVRoutePickerViewDelegate{
         return portName
     }
 }
-
+```
 
 
