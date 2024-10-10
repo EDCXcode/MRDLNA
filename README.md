@@ -115,10 +115,78 @@ pod 'MRDLNA', :git => 'https://github.com/EDCXcode/MRDLNA.git'
 }
 ```
 
-# For more information please see demo
+- 苹果系统隔空播放
 
-## License
+import AVKit
+var player : AVPlayer?
+var cmTime : CMTime?
+ //隔空播放按钮
+lazy var routeView : AVRoutePickerView = {
+        let view  =  AVRoutePickerView.init(frame: .zero)
+        view.backgroundColor = .clear
+        view.subviews.forEach { subview in
+            subview.removeFromSuperview()
+        }
+        let bgimg = UIImageView.init(image: UIImage(named: ""))
+        view.addSubview(bgimg)
+        bgimg.snp.makeConstraints { make in
+            make.size.equalTo(bgimg.intrinsicContentSize)
+            make.center.equalToSuperview()
+        }
+        view.delegate = self
+        return view
+}()
 
-WTFPL – Do What the Fuck You Want to Public License
+override func viewDidLoad() {
+        super.viewDidLoad()
+        player = AVPlayer(url: NSURL(string: "播放链接")! as URL)
+        //监听播放
+        NotificationCenter.default.addObserver(self, selector: #selector(handleRouteChange), name:AVAudioSession.routeChangeNotification, object:AVAudioSession.sharedInstance())
+        //播放进度
+        self.cmTime = CMTime(seconds: 1.0, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        self.player?.addPeriodicTimeObserver(forInterval:self.cmTime!, queue: DispatchQueue.main) { [weak self] time in
+            let currentTime = CMTimeGetSeconds(time)
+            let duration = CMTimeGetSeconds((self?.player?.currentItem?.duration)!)
+            //更新UI
+        }
+        //快进
+        //self.player?.seek(to: CMTime(seconds: Double(2.0), preferredTimescale: 1))
+}
+
+//MARK: AVRoutePickerViewDelegate
+extension XXXXViewController:AVRoutePickerViewDelegate{
+    func routePickerViewWillBeginPresentingRoutes(_ routePickerView: AVRoutePickerView)   {
+        //print("AirPlay界面弹出时回调")
+    }
+    func routePickerViewDidEndPresentingRoutes(_ routePickerView: AVRoutePickerView) {
+        //print("AirPlay界面结束时回调")
+    }
+    func routePickerView(_ routePickerView: AVRoutePickerView, didUpdateRoutes routes: [AVRoutePickerView]) {
+        // 当可用路由更新时调用
+    }
+    func routePickerView(_ routePickerView: AVRoutePickerView, didPickRoute route: AVRoutePickerView) {
+        // 当用户选择一个新的路由时调用
+    }
+    //监听回调
+    @objc func handleRouteChange(){
+        if activeAirplayOutputRouteName().isEmpty{
+            self.player?.pause()
+        }else{
+            self.player?.play()
+        }
+    }
+    //获取当前链接的播放的设备信息
+    func activeAirplayOutputRouteName() ->(String){
+        var portName :String = ""
+        let currentRoute = audioSession.currentRoute
+        currentRoute.outputs.forEach { outputPort in
+            if outputPort.portType == .airPlay{
+                portName = outputPort.portName
+            }
+        }
+        return portName
+    }
+}
+
 
 
