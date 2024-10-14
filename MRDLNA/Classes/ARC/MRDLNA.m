@@ -40,10 +40,14 @@
         
         __weak typeof (self) weakSelf = self;
         self.upd.BlockSearch = ^(BOOL ConnectionStatus) {
-            weakSelf.BlockSearch(ConnectionStatus);
+            if (weakSelf.BlockSearch) {
+                weakSelf.BlockSearch(ConnectionStatus);
+            }
         };
         self.upd.BlockSocketOff = ^{
-            weakSelf.BlockSocketOff();
+            if (weakSelf.BlockSocketOff) {
+                weakSelf.BlockSocketOff();
+            }
         };
         self.upd.delegate = self;
         self.dataArray = [NSMutableArray array];
